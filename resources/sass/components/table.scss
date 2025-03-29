@@ -1,0 +1,50 @@
+
+.table {
+
+    border-radius: 5px;
+
+    thead {
+        th {
+            vertical-align: middle;
+			padding: 1rem 0.5rem;
+			font-size: 1rem;
+			color: $default-text-color;
+
+			a{
+				color: $default-text-color !important;
+			}
+        }
+    }
+
+    td {
+		padding: 0.8rem 0.5rem;
+        vertical-align: middle;
+
+		.form-group{
+			margin: 0;
+		}
+    }
+}
+
+.stacktable.large-only {
+    min-width: 100%;
+
+    &.overflow{
+        display: table;
+        width: max-content;
+    }
+}
+
+.stacktable.small-only {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .stacktable.large-only {
+        display: none !important;
+    }
+
+    .stacktable.small-only {
+        display: table;
+    }
+}

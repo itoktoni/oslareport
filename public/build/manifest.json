@@ -1,0 +1,26 @@
+{
+  "resources/auth/css/style.scss": {
+    "file": "assets/style-CWspmG4a.css",
+    "src": "resources/auth/css/style.scss",
+    "isEntry": true
+  },
+  "resources/auth/images/bg-inner.png": {
+    "file": "assets/bg-inner-CLiQPVWY.png",
+    "src": "resources/auth/images/bg-inner.png"
+  },
+  "resources/auth/images/bg-registration-form-9.jpg": {
+    "file": "assets/bg-registration-form-9-Cl5P6dPl.jpg",
+    "src": "resources/auth/images/bg-registration-form-9.jpg"
+  },
+  "resources/js/vite.js": {
+    "file": "assets/vite-BkatOx5H.js",
+    "name": "vite",
+    "src": "resources/js/vite.js",
+    "isEntry": true
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-Bjc4D043.css",
+    "src": "resources/sass/app.scss",
+    "isEntry": true
+  }
+}

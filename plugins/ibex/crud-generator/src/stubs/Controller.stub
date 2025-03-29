@@ -1,0 +1,20 @@
+<?php
+
+namespace {{controllerNamespace}};
+
+use App\Http\Controllers\Core\MasterController;
+use App\Http\Function\CreateFunction;
+use App\Http\Function\UpdateFunction;
+use App\Services\Master\SingleService;
+use App\Facades\Model\{{modelName}}Model;
+
+class {{modelName}}Controller extends MasterController
+{
+    use CreateFunction, UpdateFunction;
+
+    public function __construct({{modelName}}Model $model, SingleService $service)
+    {
+        self::$service = self::$service ?? $service;
+        $this->model = $model::getModel();
+    }
+}

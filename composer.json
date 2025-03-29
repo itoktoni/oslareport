@@ -1,0 +1,91 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "arielmejiadev/larapex-charts": "*",
+        "bensampo/laravel-enum": "^6.2",
+        "hammerstone/fast-paginate": "^1.1",
+        "izniburak/laravel-auto-routes": "1.6.0",
+        "kirschbaum-development/eloquent-power-joins": "*",
+        "kyslik/column-sortable": "^6.4",
+        "laravel/framework": "^11.0",
+        "laravel/sanctum": "*",
+        "laravel/telescope": "^5.0",
+        "laravel/ui": "^4.5",
+        "laravie/serialize-queries": "^3.0",
+        "livewire/livewire": "^3.5",
+        "mehradsadeghi/laravel-filter-querystring": "^1.1",
+        "opcodesio/log-viewer": "^3.1",
+        "predis/predis": "^2.2",
+        "pusher/pusher-php-server": "^7.2",
+        "spatie/laravel-backup": "^9.2",
+        "spatie/simple-excel": "^3.6",
+        "wildside/userstamps": "^2.2"
+    },
+    "require-dev": {
+        "andreaselia/laravel-api-to-postman": "^2.0",
+        "beyondcode/laravel-query-detector": "*",
+        "dietercoopman/laravel-showsql": "^1.3",
+        "fzaninotto/faker": "^1.9.1",
+        "ifsnop/mysqldump-php": "^2.12",
+        "kitloong/laravel-migrations-generator": "^7.0",
+        "laravel/pint": "^1.17",
+        "laravel/sail": "^1.37",
+        "mockery/mockery": "^1.3.1",
+        "orangehill/iseed": "^3.0",
+        "phpunit/phpunit": "^9.3",
+        "spatie/laravel-mail-preview": "^6.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "platform-check": false,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Plugins\\": "plugins/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/",
+            "GeoSot\\EnvEditor\\": "plugins/geo-sot/env-editor/src/",
+            "MBarlow\\Megaphone\\": "plugins/m-barlow/megaphone/src/",
+            "Alkhachatryan\\LaravelWebConsole\\": "plugins/alkhachatryan/laravel-web-console/src/",
+            "Coderello\\SharedData\\": "plugins/coderello/shared-data/src/",
+            "Ibex\\CrudGenerator\\": "plugins/ibex/crud-generator/src/",
+            "ProtoneMedia\\LaravelFormComponents\\": "plugins/protonemedia/laravel-form-components/src/"
+        },
+        "files": [
+            "plugins/Global.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    }
+}

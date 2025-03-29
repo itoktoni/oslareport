@@ -1,0 +1,29 @@
+<?php
+
+namespace {{modelNamespace}};
+
+use App\Dao\Models\Core\SystemModel;
+
+{{softDeletesNamespace}}
+/**
+ * Class {{modelName}}
+ {{properties}}
+ * @package App
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
+
+class {{modelName}} extends SystemModel
+{
+    protected $perPage = 20;
+    protected $table = '{{tableName}}';
+    protected $primaryKey = '{{tableName}}_id';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [{{fillable}}];
+
+{{relations}}
+}

@@ -1,0 +1,14 @@
+<x-layout>
+    <x-form :model="$model">
+        <x-card>
+            <x-action form="form" />
+
+            <div class="row">
+                @bind($model)
+                    {{form}}
+                @endbind
+            </div>
+
+        </x-card>
+    </x-form>
+</x-layout>

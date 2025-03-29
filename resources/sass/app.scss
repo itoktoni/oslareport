@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+@import "bootstrap/scss/bootstrap";
+@import url('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css');
+
+@import "core/vars";
+
+@import "components/card";
+@import "components/form";
+@import "components/table";
+@import "components/typography";
+@import "components/button";
+@import "components/badge";
+@import "components/megaphone";
+
+@import url(core/selectize.bootstrap4.min.css);
+// @import url(core/nprogress.min.css);
+
+// @import "components/error";
+// @import "components/lightbox";
+// @import "components/color";
+// @import "components/body";
+
+// @import "components/pagination";
+// @import "components/dropdown";
+// @import "components/collapse";
+// @import "components/media-object";
+// @import "components/accordion";
+// @import "components/alert";
+// @import "components/notification";
+// @import "components/select2";
+// @import "components/modal";
+// @import "components/avatar";
+// @import "components/authentication";
+// @import "components/calendar";
+// @import "components/spacing.scss";
+
+// @import url(core/select2.min.css);
+// @import url(core/choosen.css);
+// @import url(core/custom-confirm.css);
+// @import url(core/flatpickr.min.css);
+// @import url(core/cute-alert.css);
+
+// Mixins
+// @import "core/mixins";
+// Components
+// @import "components/preloader";
+// @import "components/icon-block";
+
+// @import "components/form-wizard";
+// @import "components/page-header";
+
+// @import "components/colorpicker";
+
+// @import "components/progress";
+
+// @import "components/scrollbar";
+// @import "components/datepicker";
+
+// @import "components/tour";
+// @import "components/sweet-alert";
+// @import "components/range-slider";
+
+// @import "components/timepicker";
+// @import "components/file-upload";
+
+// @import "components/chat";
+// @import "components/pricing-table";
+// @import "components/timeline";
+// @import "components/list-group";
+// @import "components/toastr";
+// @import "components/nestable";
+// @import "components/slick";
+// @import "components/webapp";
+// @import "components/demo";
+
+@import "layouts";
+@import "other";
+// Header
+@import "components/header";
+// Navigation
+@import "components/navigation";
+// Footer
+// @import "components/footer";
+// Aside
+@import "components/aside";
+// Dark Theme
+// @import "dark";
+// Responsive
+@import "responsive";
+@import "custom";

@@ -1,0 +1,9 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "braces": true,
+        "braces_position" : {
+            "next_line_unless_newline_at_signature_end" : true
+        }
+    }
+}

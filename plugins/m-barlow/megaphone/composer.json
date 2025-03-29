@@ -1,0 +1,57 @@
+{
+    "name": "mbarlow/megaphone",
+    "description": "UI and admin for Laravel Notifications.",
+    "keywords": ["Announcements", "Bell Icon", "Notifications", "Livewire", "Laravel"],
+    "homepage": "https://github.com/mikebarlow/megaphone",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mike Barlow",
+            "email": "mike@mikebarlow.co.uk",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "livewire/livewire": "^3.0.1"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7",
+        "pestphp/pest-plugin-livewire": "^2.1",
+        "orchestra/testbench": "^8.10",
+        "pestphp/pest-plugin-faker": "^2.0",
+        "brianium/paratest": "^7.2",
+        "pestphp/pest": "2.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "MBarlow\\Megaphone\\": "src"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MBarlow\\Megaphone\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MBarlow\\Megaphone\\MegaphoneServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": [
+            "./vendor/bin/phpcs --standard=PSR2 src",
+            "./vendor/bin/pest"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
