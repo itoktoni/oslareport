@@ -1,0 +1,143 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Dao\Enums\Core\SyncStatusType;
+use App\Dao\Models\Core\User;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+class MaterialKotor extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'material:kotor';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'untuk mengirimkan whatsapp otomatis';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    private function baseQuery()
+    {
+        return <<<SQL
+        SELECT
+            CONCAT(
+                transaksi_id_rs,
+                transaksi_id_ruangan,
+                detail_id_jenis,
+                DATE(transaksi_created_at)
+            ) AS id,
+            transaksi_id_rs AS rs_id,
+            transaksi_id_ruangan AS ruangan_id,
+            detail_id_jenis AS jenis_id,
+            DATE(transaksi_created_at) AS tanggal,
+            COUNT( transaksi_rfid ) AS qty
+        FROM
+            transaksi
+            JOIN detail on detail_rfid = transaksi_rfid
+        WHERE
+        DATE(transaksi_created_at) >= ( CURDATE() - INTERVAL 30 DAY )
+            AND transaksi_id_ruangan IS NOT NULL
+            AND transaksi_status = 1 -- KOTOR
+        GROUP BY
+            transaksi_id_rs,
+            transaksi_id_ruangan,
+            detail_id_jenis,
+            DATE(transaksi_created_at)
+        SQL;
+    }
+
+    private function getAlreadySync()
+    {
+        $total_material = DB::connection('report')->table('data_kotor')->sum('qty');
+        $total_transaksi = DB::connection('report')
+            ->table('transaksi')
+            ->where('transaksi_status', 1)
+            ->whereNotNull('transaksi_id_ruangan')
+            ->whereDate('transaksi_created_at', '>=', Carbon::now()->subDays(30))
+            ->count('transaksi_rfid');
+
+        return $total_material == $total_transaksi;
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        if(Cache::get('sync') == SyncStatusType::Pending)
+        {
+            $this->info("Proses Start");
+
+            $sql = "
+
+            -- create table if not exists
+            CREATE TABLE IF NOT EXISTS data_kotor AS
+            {$this->baseQuery()};
+
+            -- Truncate the table
+            TRUNCATE TABLE data_kotor;
+
+            -- Insert data from another table
+            INSERT INTO data_kotor
+            {$this->baseQuery()};
+
+            ";
+
+            $done = DB::connection('report')->unprepared($sql);
+            if($done)
+            {
+                Cache::put('sync', SyncStatusType::Sync);
+                Cache::put('last_sync_time', now());
+            }
+
+            Log::info($done);
+            $this->info("Proses Done");
+        }
+        else
+        {
+            $lastSyncTime = Cache::get('last_sync_time');
+            $needsSync = Carbon::parse($lastSyncTime)->diffInSeconds(now()) > 5;
+
+            if($needsSync)
+            {
+                if($this->getAlreadySync())
+                {
+                    $this->info("Already sync total");
+                    Cache::put('sync', SyncStatusType::Sync);
+                }
+                else
+                {
+                    $this->info("Sync Time");
+                    Cache::put('sync', SyncStatusType::Pending);
+                }
+            }
+            else
+            {
+                $this->info("Already Sync");
+                Cache::put('sync', SyncStatusType::Sync);
+            }
+        }
+    }
+}

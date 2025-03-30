@@ -49,26 +49,19 @@
     @include('layouts.alert')
 
     <script src="{{ url('assets/js/app.min.js') }}"></script>
-    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
     @stack('footer')
 
     @livewireScripts
 
     <script>
-    Pusher.logToConsole = {{ env('APP_DEBUG') ? 'true' : 'false' }};
-
-    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-        cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-        authEndpoint: '{{ url('/broadcasting/auth') }}'
+document.addEventListener('livewire:init', () => {
+    // Optional debugging
+    Livewire.on('notify-subscribers', (event) => {
+        console.log('Notification event:', event);
     });
-
-    var channel = pusher.subscribe('private-broadcast');
-    channel.bind('bell', function(data) {
-        window.Livewire.dispatch('bell');
-    });
-    </script>
-
+});
+</script>
 </body>
 
 </html>
