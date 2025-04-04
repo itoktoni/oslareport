@@ -17,7 +17,7 @@ class MaterialKotor extends Command
      *
      * @var string
      */
-    protected $signature = 'material:kotor';
+    protected $signature = 'material:kotor {--day=7}';
 
     /**
      * The console command description.
@@ -36,7 +36,14 @@ class MaterialKotor extends Command
         parent::__construct();
     }
 
-    private function baseQuery()
+    private function deletePeriodeDays($day = 7)
+    {
+        return <<<SQL
+        DELETE FROM data_kotor WHERE tanggal >= ( CURDATE() - INTERVAL $day DAY )
+        SQL;
+    }
+
+    private function baseQuery($day = 7)
     {
         return <<<SQL
         SELECT
@@ -55,7 +62,7 @@ class MaterialKotor extends Command
             transaksi
             JOIN detail on detail_rfid = transaksi_rfid
         WHERE
-        DATE(transaksi_created_at) >= ( CURDATE() - INTERVAL 30 DAY )
+        DATE(transaksi_created_at) >= ( CURDATE() - INTERVAL $day DAY )
             AND transaksi_id_ruangan IS NOT NULL
             AND transaksi_status = 1 -- KOTOR
         GROUP BY
@@ -66,14 +73,14 @@ class MaterialKotor extends Command
         SQL;
     }
 
-    private function getAlreadySync()
+    private function getAlreadySync($day = 7)
     {
         $total_material = DB::connection('report')->table('data_kotor')->sum('qty');
         $total_transaksi = DB::connection('report')
             ->table('transaksi')
             ->where('transaksi_status', 1)
             ->whereNotNull('transaksi_id_ruangan')
-            ->whereDate('transaksi_created_at', '>=', Carbon::now()->subDays(30))
+            ->whereDate('transaksi_created_at', '>=', Carbon::now()->subDays($day))
             ->count('transaksi_rfid');
 
         return $total_material == $total_transaksi;
@@ -86,6 +93,8 @@ class MaterialKotor extends Command
      */
     public function handle()
     {
+        $day = $this->option('day');
+
         if(Cache::get('sync') == SyncStatusType::Pending)
         {
             $this->info("Proses Start");
@@ -94,14 +103,14 @@ class MaterialKotor extends Command
 
             -- create table if not exists
             CREATE TABLE IF NOT EXISTS data_kotor AS
-            {$this->baseQuery()};
+            {$this->baseQuery($day)};
 
-            -- Truncate the table
-            TRUNCATE TABLE data_kotor;
+            -- TRUNCATE TABLE data_kotor;
+            {$this->deletePeriodeDays($day)};
 
             -- Insert data from another table
             INSERT INTO data_kotor
-            {$this->baseQuery()};
+            {$this->baseQuery($day)};
 
             ";
 
@@ -118,7 +127,7 @@ class MaterialKotor extends Command
         else
         {
             $lastSyncTime = Cache::get('last_sync_time');
-            $needsSync = Carbon::parse($lastSyncTime)->diffInSeconds(now()) > 5;
+            $needsSync = Carbon::parse($lastSyncTime)->diffInSeconds(now()) > 60;
 
             if($needsSync)
             {
