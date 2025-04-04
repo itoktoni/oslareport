@@ -75,7 +75,11 @@ class MaterialKotor extends Command
 
     private function getAlreadySync($day = 7)
     {
-        $total_material = DB::connection('report')->table('data_kotor')->sum('qty');
+        $total_material = DB::connection('report')
+            ->table('data_kotor')
+            ->where('tanggal', '>=', Carbon::now()->subDays($day))
+            ->sum('qty');
+
         $total_transaksi = DB::connection('report')
             ->table('transaksi')
             ->where('transaksi_status', 1)
@@ -127,7 +131,7 @@ class MaterialKotor extends Command
         else
         {
             $lastSyncTime = Cache::get('last_sync_time');
-            $needsSync = Carbon::parse($lastSyncTime)->diffInSeconds(now()) > 60;
+            $needsSync = Carbon::parse($lastSyncTime)->diffInMinutes(now()) > 5;
 
             if($needsSync)
             {

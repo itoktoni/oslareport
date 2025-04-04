@@ -20,7 +20,7 @@
 
         </button>
 
-        <div wire:poll.30s="updateStatus"></div>
+        <div wire:poll.10s="updateStatus"></div>
 
         @if ($syncStatus === SyncStatusType::Pending)
             <div wire:init="triggerSync"></div>
