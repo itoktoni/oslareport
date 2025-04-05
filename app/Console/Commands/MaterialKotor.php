@@ -39,6 +39,7 @@ class MaterialKotor extends Command
     private function deletePeriodeDays($day = 7)
     {
         return <<<SQL
+        -- TRUNCATE TABLE data_kotor;
         DELETE FROM data_kotor WHERE tanggal >= ( CURDATE() - INTERVAL $day DAY )
         SQL;
     }
@@ -77,17 +78,19 @@ class MaterialKotor extends Command
     {
         $total_material = DB::connection('report')
             ->table('data_kotor')
-            ->where('tanggal', '>=', Carbon::now()->subDays($day))
-            ->sum('qty');
+            ->selectRaw('SUM(qty) as qty')
+            ->where('tanggal', '>=', Carbon::now()->subDays($day)->format('Y-m-d'))
+            ->first();
 
         $total_transaksi = DB::connection('report')
             ->table('transaksi')
+            ->selectRaw('COUNT(transaksi_rfid) as qty')
             ->where('transaksi_status', 1)
             ->whereNotNull('transaksi_id_ruangan')
             ->whereDate('transaksi_created_at', '>=', Carbon::now()->subDays($day))
-            ->count('transaksi_rfid');
+            ->first();
 
-        return $total_material == $total_transaksi;
+        return $total_material->qty == $total_transaksi->qty;
     }
 
     /**
